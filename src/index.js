@@ -4,6 +4,7 @@ const input = document.querySelector('input');
 const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form');
 
+document.querySelector('.load-more').style.display = 'none';
 
 
 
@@ -47,7 +48,7 @@ form.addEventListener('submit', (evt) => {
   var inputText = input.value;
   getPhoto(inputText).then()
 
-
+  document.querySelector('.load-more').style.display = 'block';
   evt.preventDefault();
   console.log('search done')
 })
