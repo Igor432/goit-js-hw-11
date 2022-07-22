@@ -17,16 +17,20 @@ async function getPhoto(name) {
   <img src=${photo.webformatURL} alt="" loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>${photo.likes}Likes</b>
+      <b>Likes</b>
+      <br>${photo.likes}</br> 
     </p>
     <p class="info-item">
-      <b>${photo.views}Views</b>
+      <b>Views</b>
+      <br>${photo.views}</br> 
     </p>
     <p class="info-item">
-      <b>${photo.comments}Comments</b>
+      <b>Comments</b>
+      <br>${photo.comments}</br> 
     </p>
     <p class="info-item">
-      <b>${photo.downloads}Downloads</b>
+      <b>Downloads</b>
+      <br>${photo.downloads}</br> 
     </p>
   </div>
 </div>`
