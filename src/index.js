@@ -1,5 +1,6 @@
 import simpleLightbox from 'simplelightbox';
 import "simplelightbox/dist/simple-lightbox.min.css";
+import Notiflix from 'notiflix';
 
 
 
@@ -27,9 +28,14 @@ async function getPhoto(name) {
 
 function makeList(photos) {
 
+  if (photos.length === 0) {
+    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+    document.querySelector('.load-more').style.display = 'none';
+  } else {
 
-  const galleryList = photos.map((photo) => {
-    return `<div class="photo-card" >
+
+    const galleryList = photos.map((photo) => {
+      return `<div class="photo-card" >
     <a href=${photo.largeImageURL} class='gallery_link'><img src=${photo.webformatURL} width='400px' height='300px' alt=${photo.tags} title="" /></a>
   <div class="info" width='400px'>
     <p class="info-item">
@@ -51,14 +57,14 @@ function makeList(photos) {
   </div>
 </div>`
 
-  }).join(' ')
-  gallery.insertAdjacentHTML("beforeend", galleryList);;
+    }).join(' ')
+    gallery.insertAdjacentHTML("beforeend", galleryList);;
 
-  const lightBox = new simpleLightbox('.gallery_link', { captionSelector: 'img', captionsData: 'alt', captionPosition: 'bottom', captionDelay: 250 });
+    const lightBox = new simpleLightbox('.gallery_link', { captionSelector: 'img', captionsData: 'alt', captionPosition: 'bottom', captionDelay: 250 });
 
 
+  }
 }
-
 
 loadMore.addEventListener('click', () => {
 
