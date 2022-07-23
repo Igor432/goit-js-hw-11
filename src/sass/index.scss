@@ -2,6 +2,16 @@
 @import './example';
 
 
+body {
+    justify-content: center;
+}
+
+.search-form {
+    margin-top: 50px;
+margin-left: 500px;
+margin-bottom: 50px;
+}
+
 
 .gallery {
     display: flex;
@@ -11,17 +21,33 @@
    
 }
 
+img {
+object-fit: cover;
+}
+
+
+.photo-card {
+    width: 400px;
+    margin-top: 20px;
+}
+
 .info {
     display: flex;
+    background-color: rgb(198, 208, 208);
+    justify-content: center;
 }
 
 .info >p {
-    margin-left: 50px;
+ margin-left: auto;
+ margin-right: auto;
 }
 
 .load-more {
-    margin-top:  40px;
-    margin-bottom:  40px;
+    margin-top: 50px;
+   margin-left: auto;
+   margin-right: auto;
+   height: 50px;
+   width: 200px;
 }
 
 

@@ -1,3 +1,7 @@
+import simpleLightbox from 'simplelightbox';
+import "simplelightbox/dist/simple-lightbox.min.css";
+
+
 
 const axios = require('axios').default;
 const input = document.querySelector('input');
@@ -16,17 +20,18 @@ async function getPhoto(name) {
 
   const photos = await axios.get(`https://pixabay.com/api/?key=28780636-ee20ed417c8a5aa1eeee48e35&q=${name}&image_type=photo&orientation=horizontal&safesearch=true$&per_page=${perPage}&page=${page}`);
   return photos.data.hits;
-
 }
 
 
 
 
 function makeList(photos) {
+
+
   const galleryList = photos.map((photo) => {
-    return `<div class="photo-card">
-  <img src=${photo.webformatURL} alt="" loading="lazy" width='500px' heigh='auto' />
-  <div class="info">
+    return `<div class="photo-card" >
+    <a href=${photo.largeImageURL} class='gallery_link'><img src=${photo.webformatURL} width='400px' height='300px' alt=${photo.tags} title="" /></a>
+  <div class="info" width='400px'>
     <p class="info-item">
       <b>Likes</b>
       <br>${photo.likes}</br> 
@@ -46,13 +51,17 @@ function makeList(photos) {
   </div>
 </div>`
 
-  })
+  }).join(' ')
   gallery.insertAdjacentHTML("beforeend", galleryList);;
+
+  const lightBox = new simpleLightbox('.gallery_link', { captionSelector: 'img', captionsData: 'alt', captionPosition: 'bottom', captionDelay: 250 });
+
 
 }
 
 
 loadMore.addEventListener('click', () => {
+
   var inputText = input.value;
   page += 1;
   perPage += 40;
@@ -61,6 +70,9 @@ loadMore.addEventListener('click', () => {
     makeList(photos)
 
   })
+
+
+
 })
 
 
@@ -68,6 +80,8 @@ loadMore.addEventListener('click', () => {
 
 form.addEventListener('submit', (evt) => {
   var inputText = input.value;
+  gallery.innerHTML = '';
+
   getPhoto(inputText).then(photos => makeList(photos))
 
   document.querySelector('.load-more').style.display = 'block';
@@ -83,15 +97,6 @@ form.addEventListener('submit', (evt) => {
 
 
 
-
-
-
-
-/*
-
-  { webformatURL, largeImageURL, tags, likes, views, comments, downloads }
-
-  */
 
 
 
