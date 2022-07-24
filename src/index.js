@@ -21,15 +21,29 @@ let totalPage = ''
 
 async function getPhoto(name) {
 
+
   const photos = await axios.get(`https://pixabay.com/api/?key=28780636-ee20ed417c8a5aa1eeee48e35&q=${name}&image_type=photo&orientation=horizontal&safesearch=true$&per_page=${perPage}&page=${page}`);
 
-
   totalPage = photos.data.totalHits / perPage
+
+
+
+
   console.log(totalPage)
+
+
 
   totalFound.innerHTML = ` Hooray! We found ${photos.data.totalHits} images.`
 
+  /*
+  if (page > totalPage) {
+    
+
+  }
+  */
+
   return photos.data.hits;
+
 }
 
 
@@ -39,7 +53,9 @@ async function getPhoto(name) {
 function makeList(photos) {
 
   if (photos.length === 0) {
+
     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+
     document.querySelector('.load-more').style.display = 'none';
   } else {
     document.querySelector('.load-more').style.display = 'block';
@@ -52,19 +68,19 @@ function makeList(photos) {
   <div class="info" width='400px'>
     <p class="info-item">
       <b>Likes</b>
-      <br>${photo.likes}</br> 
+      <br class = 'photo_value'>${photo.likes}</br> 
     </p>
     <p class="info-item">
       <b>Views</b>
-      <br>${photo.views}</br> 
+      <br class = 'photo_value'>${photo.views}</br> 
     </p>
     <p class="info-item">
       <b>Comments</b>
-      <br>${photo.comments}</br> 
+      <br class = 'photo_value'>${photo.comments}</br> 
     </p>
     <p class="info-item">
       <b>Downloads</b>
-      <br>${photo.downloads}</br> 
+      <br class = 'photo_value'>${photo.downloads}</br> 
     </p>
   </div>
 </div>`
@@ -81,30 +97,34 @@ function makeList(photos) {
 loadMore.addEventListener('click', () => {
 
   var inputText = input.value;
+
   page += 1;
-  perPage += 40;
+  perPage <= 40;
   getPhoto(inputText).then((photos) => {
-    if (page > totalPage) {
+    if (photos.length === 0) {
       Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
-    } else {
-      makeList(photos)
+
     }
-  })
+    makeList(photos)
+  }
+  )
+}
+)
 
 
 
+
+form.addEventListener('input', () => {
+  page = 1;
+  perPage = 40;
 })
-
 
 
 
 form.addEventListener('submit', (evt) => {
   var inputText = input.value;
   gallery.innerHTML = '';
-
   getPhoto(inputText).then(photos => makeList(photos))
-
-
   evt.preventDefault();
   console.log('search done')
 
