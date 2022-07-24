@@ -8,6 +8,8 @@ const axios = require('axios').default;
 const input = document.querySelector('input');
 const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form');
+const totalFound = document.querySelector('.total_found')
+
 
 document.querySelector('.load-more').style.display = 'none';
 const loadMore = document.querySelector('.load-more');
@@ -20,6 +22,10 @@ let perPage = 40;
 async function getPhoto(name) {
 
   const photos = await axios.get(`https://pixabay.com/api/?key=28780636-ee20ed417c8a5aa1eeee48e35&q=${name}&image_type=photo&orientation=horizontal&safesearch=true$&per_page=${perPage}&page=${page}`);
+  console.log(photos.data.totalHits)
+
+  totalFound.innerHTML = `${photos.data.totalHits} Photos have been found`
+
   return photos.data.hits;
 }
 
@@ -32,6 +38,8 @@ function makeList(photos) {
     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
     document.querySelector('.load-more').style.display = 'none';
   } else {
+    document.querySelector('.load-more').style.display = 'block';
+
 
 
     const galleryList = photos.map((photo) => {
@@ -90,7 +98,7 @@ form.addEventListener('submit', (evt) => {
 
   getPhoto(inputText).then(photos => makeList(photos))
 
-  document.querySelector('.load-more').style.display = 'block';
+
   evt.preventDefault();
   console.log('search done')
 
