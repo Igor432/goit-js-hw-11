@@ -26,21 +26,16 @@ async function getPhoto(name) {
 
   totalPage = photos.data.totalHits / perPage
 
+  if (totalPage === 0) {
+    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
+    totalFound.innerHTML = ` Shit! We found no images.`
 
+  } else {
 
+    console.log(totalPage)
 
-  console.log(totalPage)
-
-
-
-  totalFound.innerHTML = ` Hooray! We found ${photos.data.totalHits} images.`
-
-  /*
-  if (page > totalPage) {
-    
-
+    totalFound.innerHTML = ` Hooray! We found ${photos.data.totalHits} images.`
   }
-  */
 
   return photos.data.hits;
 
@@ -54,10 +49,10 @@ function makeList(photos) {
 
   if (photos.length === 0) {
 
-    Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
-
     document.querySelector('.load-more').style.display = 'none';
   } else {
+
+
     document.querySelector('.load-more').style.display = 'block';
 
     console.log(photos)
@@ -94,6 +89,37 @@ function makeList(photos) {
   }
 }
 
+
+
+
+
+form.addEventListener('input', () => {
+  page = 1;
+  perPage = 40;
+})
+
+
+form.addEventListener('submit', (evt) => {
+  var inputText = input.value;
+  gallery.innerHTML = '';
+  getPhoto(inputText)
+    .then(photos => makeList(photos))
+    .catch((error) => console.log(error))
+
+  evt.preventDefault();
+  console.log('search done')
+
+
+
+  /*
+  */
+
+
+})
+
+
+
+
 loadMore.addEventListener('click', () => {
 
   var inputText = input.value;
@@ -110,31 +136,6 @@ loadMore.addEventListener('click', () => {
   )
 }
 )
-
-
-
-
-form.addEventListener('input', () => {
-  page = 1;
-  perPage = 40;
-})
-
-
-
-form.addEventListener('submit', (evt) => {
-  var inputText = input.value;
-  gallery.innerHTML = '';
-  getPhoto(inputText).then(photos => makeList(photos))
-  evt.preventDefault();
-  console.log('search done')
-
-
-})
-
-
-
-
-
 
 
 
