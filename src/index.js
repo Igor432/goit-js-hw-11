@@ -17,17 +17,21 @@ const loadMore = document.querySelector('.load-more');
 
 let page = 1;
 let perPage = 40;
-
+let totalPage = ''
 
 async function getPhoto(name) {
 
   const photos = await axios.get(`https://pixabay.com/api/?key=28780636-ee20ed417c8a5aa1eeee48e35&q=${name}&image_type=photo&orientation=horizontal&safesearch=true$&per_page=${perPage}&page=${page}`);
-  console.log(photos.data.totalHits)
 
-  totalFound.innerHTML = `${photos.data.totalHits} Photos have been found`
+
+  totalPage = photos.data.totalHits / perPage
+  console.log(totalPage)
+
+  totalFound.innerHTML = ` Hooray! We found ${photos.data.totalHits} images.`
 
   return photos.data.hits;
 }
+
 
 
 
@@ -40,7 +44,7 @@ function makeList(photos) {
   } else {
     document.querySelector('.load-more').style.display = 'block';
 
-
+    console.log(photos)
 
     const galleryList = photos.map((photo) => {
       return `<div class="photo-card" >
@@ -80,9 +84,11 @@ loadMore.addEventListener('click', () => {
   page += 1;
   perPage += 40;
   getPhoto(inputText).then((photos) => {
-
-    makeList(photos)
-
+    if (page > totalPage) {
+      Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
+    } else {
+      makeList(photos)
+    }
   })
 
 
@@ -101,10 +107,6 @@ form.addEventListener('submit', (evt) => {
 
   evt.preventDefault();
   console.log('search done')
-
-
-
-
 
 
 })
