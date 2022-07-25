@@ -1,10 +1,10 @@
 import simpleLightbox from 'simplelightbox';
 import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from 'notiflix';
-
-
-
 const axios = require('axios').default;
+
+
+
 const input = document.querySelector('input');
 const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form');
@@ -13,7 +13,6 @@ const totalFound = document.querySelector('.total_found')
 
 document.querySelector('.load-more').style.display = 'none';
 const loadMore = document.querySelector('.load-more');
-
 
 
 let page = 1;
@@ -92,7 +91,8 @@ function makeList(photos) {
 
 
 
-form.addEventListener('input', () => {
+form.addEventListener('change', (evt) => {
+  console.log(evt.target.value)
   page = 1;
   perPage = 40;
 })
@@ -100,6 +100,8 @@ form.addEventListener('input', () => {
 
 form.addEventListener('submit', (evt) => {
   var inputText = input.value;
+  document.addEventListener('scroll', scrollInfinite)
+
   gallery.innerHTML = '';
   getPhoto(inputText)
     .then(photos => makeList(photos))
@@ -107,8 +109,6 @@ form.addEventListener('submit', (evt) => {
 
   evt.preventDefault();
   console.log('search done')
-
-
 
 })
 
@@ -149,14 +149,17 @@ function scrollInfinite() {
   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
 
     var inputText = input.value;
+
     page += 1;
     perPage <= 40;
     getPhoto(inputText).then((photos) => {
       if (photos.length === 0) {
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
         removeScroll();
+      } else {
+
+        makeList(photos)
       }
-      makeList(photos)
     }
     )
   }
