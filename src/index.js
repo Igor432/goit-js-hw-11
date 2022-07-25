@@ -3,6 +3,8 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from 'notiflix';
 const axios = require('axios').default;
 
+import OnlyScroll from 'only-scrollbar';
+
 
 
 const input = document.querySelector('input');
@@ -19,6 +21,8 @@ let page = 1;
 let perPage = 40;
 let totalPage = ''
 let totalImages = ''
+
+
 
 async function getPhoto(name) {
 
@@ -56,8 +60,8 @@ function makeList(photos) {
     console.log(photos)
 
     const galleryList = photos.map((photo) => {
-      return `<div class="photo-card" >
-    <a href=${photo.largeImageURL} class='gallery_link'><img src=${photo.webformatURL} width='400px' height='300px' alt=${photos.tags} title="" /></a>
+      return `<div class="photo_card" width='500px' height='400px'  >
+    <a href=${photo.largeImageURL} id='gallery-link'  class='gallery_link'><img src=${photo.webformatURL}  alt=${photos.tags} title="" class="img-link" width='400px' height='300px'/></a>
   <div class="info" width='400px'>
     <p class="info-item">
       <b>Likes</b>
@@ -79,9 +83,15 @@ function makeList(photos) {
 </div>`
 
     }).join(' ')
+
+
     gallery.insertAdjacentHTML("beforeend", galleryList);;
 
     const lightBox = new simpleLightbox('.gallery_link', { captionSelector: 'img', captionsData: 'alt', captionPosition: 'bottom', captionDelay: 250 });
+
+
+    const scroll = new OnlyScroll(document.querySelector('.photo_card'))
+
 
 
   }
@@ -99,12 +109,15 @@ form.addEventListener('change', (evt) => {
 
 
 form.addEventListener('submit', (evt) => {
+
+
   var inputText = input.value;
   document.addEventListener('scroll', scrollInfinite)
 
   gallery.innerHTML = '';
   getPhoto(inputText)
     .then(photos => makeList(photos))
+    .then(scroll)
     .catch((error) => console.log(error))
 
   evt.preventDefault();
@@ -143,6 +156,7 @@ function removeScroll() {
 
 
 function scrollInfinite() {
+
   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
 
     var inputText = input.value;
@@ -158,6 +172,9 @@ function scrollInfinite() {
         document.addEventListener('scroll', scrollInfinite)
 
         makeList(photos)
+
+
+
       }
     }
     )
@@ -166,6 +183,7 @@ function scrollInfinite() {
 
 
 }
+
 
 
 
