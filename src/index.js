@@ -141,9 +141,6 @@ function removeScroll() {
 }
 
 
-document.addEventListener('scroll', scrollInfinite)
-
-
 
 function scrollInfinite() {
   if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
@@ -154,9 +151,11 @@ function scrollInfinite() {
     perPage <= 40;
     getPhoto(inputText).then((photos) => {
       if (photos.length === 0) {
+        console.log(photos.length)
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
         removeScroll();
       } else {
+        document.addEventListener('scroll', scrollInfinite)
 
         makeList(photos)
       }
