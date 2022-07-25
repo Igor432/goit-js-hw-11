@@ -15,15 +15,18 @@ document.querySelector('.load-more').style.display = 'none';
 const loadMore = document.querySelector('.load-more');
 
 
+
 let page = 1;
 let perPage = 40;
 let totalPage = ''
+let totalImages = ''
 
 async function getPhoto(name) {
 
 
   const photos = await axios.get(`https://pixabay.com/api/?key=28780636-ee20ed417c8a5aa1eeee48e35&q=${name}&image_type=photo&orientation=horizontal&safesearch=true$&per_page=${perPage}&page=${page}`);
 
+  totalImages = photos.data.totalHits
   totalPage = photos.data.totalHits / perPage
 
   if (totalPage === 0) {
@@ -51,15 +54,11 @@ function makeList(photos) {
 
     document.querySelector('.load-more').style.display = 'none';
   } else {
-
-
-    document.querySelector('.load-more').style.display = 'block';
-
     console.log(photos)
 
     const galleryList = photos.map((photo) => {
       return `<div class="photo-card" >
-    <a href=${photo.largeImageURL} class='gallery_link'><img src=${photo.webformatURL} width='400px' height='300px' alt=${photo.tags} title="" /></a>
+    <a href=${photo.largeImageURL} class='gallery_link'><img src=${photo.webformatURL} width='400px' height='300px' alt=${photos.tags} title="" /></a>
   <div class="info" width='400px'>
     <p class="info-item">
       <b>Likes</b>
@@ -111,14 +110,10 @@ form.addEventListener('submit', (evt) => {
 
 
 
-  /*
-  */
-
-
 })
 
 
-
+/*
 
 loadMore.addEventListener('click', () => {
 
@@ -137,8 +132,38 @@ loadMore.addEventListener('click', () => {
 }
 )
 
+*/
 
 
+function removeScroll() {
+  document.removeEventListener('scroll', scrollInfinite);
+
+}
+
+
+document.addEventListener('scroll', scrollInfinite)
+
+
+
+function scrollInfinite() {
+  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight) {
+
+    var inputText = input.value;
+    page += 1;
+    perPage <= 40;
+    getPhoto(inputText).then((photos) => {
+      if (photos.length === 0) {
+        Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.")
+        removeScroll();
+      }
+      makeList(photos)
+    }
+    )
+  }
+
+
+
+}
 
 
 
