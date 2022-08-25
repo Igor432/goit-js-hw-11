@@ -28,7 +28,7 @@ async function getPhoto(name, page) {
   const photos = await axios.get(`https://pixabay.com/api/?key=28780636-ee20ed417c8a5aa1eeee48e35&q=${name}&image_type=photo&orientation=horizontal&safesearch=true$&per_page=${perPage}&page=${page}`);
 
   totalImages = photos.data.totalHits
-  totalPage = photos.data.totalHits / perPage
+  const totalPage = photos.data.totalHits / perPage
 
   if (totalPage === 0) {
     Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
@@ -142,6 +142,7 @@ function addButtonfunc(name) {
 
   let pageItem = document.querySelectorAll('.page_item')
 
+
   /*
     let pagination = Object.keys(pageItem)
     pagination = pagination.map((number, index) => {
@@ -177,7 +178,7 @@ function addButtonfunc(name) {
 
           .catch((error) => console.log(error))
 
-      });
+      }, console.log(pageItem));
     }
   }
   )
