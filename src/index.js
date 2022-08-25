@@ -11,20 +11,18 @@ const input = document.querySelector('input');
 const gallery = document.querySelector('.gallery')
 const form = document.querySelector('.search-form');
 const totalFound = document.querySelector('.total_found')
-
-
+const pageList = document.querySelector('.page_list')
 document.querySelector('.load-more').style.display = 'none';
 const loadMore = document.querySelector('.load-more');
-
-
-let page = 1;
+const loader = document.querySelector('.loader')
+const trainList = document.querySelector('.page_list_two')
 let perPage = 40;
-let totalPage = ''
-let totalImages = ''
+
+let totalImages = 0;
 
 
 
-async function getPhoto(name) {
+async function getPhoto(name, page) {
 
 
   const photos = await axios.get(`https://pixabay.com/api/?key=28780636-ee20ed417c8a5aa1eeee48e35&q=${name}&image_type=photo&orientation=horizontal&safesearch=true$&per_page=${perPage}&page=${page}`);
@@ -38,12 +36,14 @@ async function getPhoto(name) {
 
   } else {
 
-    console.log(totalPage)
 
     totalFound.innerHTML = ` Hooray! We found ${photos.data.totalHits} images.`
   }
-
+  pageList.innerHTML = ''
+  pageButtons(totalPage)
+  addButtonfunc(name)
   return photos.data.hits;
+
 
 }
 
@@ -51,7 +51,17 @@ async function getPhoto(name) {
 
 
 
+
+
+
+
+
+
 function makeList(photos) {
+
+
+
+
 
   if (photos.length === 0) {
 
@@ -95,35 +105,130 @@ function makeList(photos) {
 
 
   }
+
+  hideLoader()
+
 }
 
 
 
 
 
-form.addEventListener('change', (evt) => {
-  console.log(evt.target.value)
-  page = 1;
-  perPage = 40;
-})
+
+
+
+
+
+function createButton(index) {
+  let pageNum = document.createElement('button')
+  pageNum.innerHTML = index
+  pageNum.setAttribute("page-index", index);
+  pageNum.className = 'page_item'
+  pageList.appendChild(pageNum)
+
+}
+
+function pageButtons(totalPage) {
+
+  for (i = 1; i <= totalPage; i++) {
+    createButton(i)
+  }
+
+
+
+}
+
+function addButtonfunc(name) {
+
+  let pageItem = document.querySelectorAll('.page_item')
+
+  /*
+    let pagination = Object.keys(pageItem)
+    pagination = pagination.map((number, index) => {
+      return (
+        `<li><button page-index=${index} class='page_item_two'>${number}</button></li>`
+  
+      )
+    }).join(' ')
+  
+    const train_buttons = document.querySelector('.page_item_two')
+    console.log(train_buttons)
+  
+  
+    trainList.innerHTML = pagination
+  */
+
+  pageItem.forEach((button) => {
+    const pageIndex = Number(button.getAttribute("page-index"));
+
+
+
+
+    if (pageIndex) {
+      button.addEventListener("click", () => {
+        console.log(pageIndex)
+        gallery.innerHTML = '';
+        loader.classList.remove('is-hidden')
+
+
+
+        getPhoto(name, pageIndex)
+          .then(photos => makeList(photos))
+
+          .catch((error) => console.log(error))
+
+      });
+    }
+  }
+  )
+
+}
+
+/*
+function addTrain() {
+  console.log(train_buttons)
+  const train_buttons = document.querySelector('.page_item_two')
+  train_buttons.forEach(button => {
+    button.addEventListener('click', (e) => {
+
+
+      console.log(e.currentTarget)
+    })
+  })
+
+
+
+}
+*/
+
+function hideLoader() {
+  loader.classList.add('is-hidden')
+}
+
 
 
 form.addEventListener('submit', (evt) => {
 
-
+  loader.classList.remove('is-hidden')
   var inputText = input.value;
+  /*
   document.addEventListener('scroll', scrollInfinite)
+  */
 
   gallery.innerHTML = '';
-  getPhoto(inputText)
-    .then(photos => makeList(photos))
-    .then(scroll)
+
+  getPhoto(inputText, 1)
+    .then(photos => makeList(photos, inputText))
     .catch((error) => console.log(error))
 
   evt.preventDefault();
   console.log('search done')
 
+
 })
+
+
+
 
 
 /*
@@ -147,7 +252,7 @@ loadMore.addEventListener('click', () => {
 
 */
 
-
+/*
 function removeScroll() {
   document.removeEventListener('scroll', scrollInfinite);
 
@@ -184,6 +289,6 @@ function scrollInfinite() {
 
 }
 
-
+*/
 
 
