@@ -130,7 +130,7 @@ function createButton(index) {
 
 function pageButtons(totalPage) {
 
-  for (i = 1; i <= totalPage; i++) {
+  for (let i = 1; i <= totalPage; i++) {
     createButton(i)
   }
 
