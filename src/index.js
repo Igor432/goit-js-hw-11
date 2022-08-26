@@ -44,8 +44,17 @@ async function getPhoto(name, page) {
   addButtonfunc(name)
   return photos.data.hits;
 
+  $(function () {
+    $(totalPage).pagination({
+      items: 100,
+      itemsOnPage: 10,
+      cssStyle: 'light-theme'
+    });
+  });
+
 
 }
+
 
 
 
@@ -109,7 +118,6 @@ function makeList(photos) {
   hideLoader()
 
 }
-
 
 
 
